@@ -28,34 +28,9 @@ function scrapeForum(url, selector) {
         });
 }
 
-// promises = [
-//                 scrapeForum(url+1, getIDSelector(1)),
-//                 scrapeForum(url+1, getPostSelector(2)),
-//                 scrapeForum(url+1, getIDSelector(2)),
-//                 scrapeForum(url+1, getPostSelector(2)),
-//                 scrapeForum(url+1, getIDSelector(3)),
-//                 scrapeForum(url+1, getPostSelector(3)),
-//                 scrapeForum(url+1, getIDSelector(4)),
-//                 scrapeForum(url+1, getPostSelector(4)),
-//                 scrapeForum(url+1, getIDSelector(5)),
-//                 scrapeForum(url+1, getPostSelector(5)),
-//                 scrapeForum(url+1, getIDSelector(5)),
-//                 scrapeForum(url+1, getPostSelector(5)),
-//                 scrapeForum(url+1, getIDSelector(6)),
-//                 scrapeForum(url+1, getPostSelector(6)),
-//                 scrapeForum(url+1, getIDSelector(7)),
-//                 scrapeForum(url+1, getPostSelector(7)),
-//                 scrapeForum(url+1, getIDSelector(8)),
-//                 scrapeForum(url+1, getPostSelector(8)),
-//                 scrapeForum(url+1, getIDSelector(9)),
-//                 scrapeForum(url+1, getPostSelector(9)),
-//                 scrapeForum(url+1, getIDSelector(10)),
-//                 scrapeForum(url+1, getPostSelector(10)),
-//             ]
-
 promises = []
 
-let maxPages = 1
+let maxPages = 17
 let maxPosts = 10
 for (let page = 1; page <= maxPages; page++) {
     for (let post = 1; post <= maxPosts; post++) {
@@ -64,22 +39,9 @@ for (let page = 1; page <= maxPages; page++) {
     }
 }
 
-Promise.all(promises).then(value => console.log(value))
+Promise.all(promises)
+        .then( (value) => {
+            console.log(value.toString().trim()+'\r=================')
+        })
+    
 
-
-
-// value = scrapeForum(url+1, getIDSelector(1))
-// console.log(value)
-
-// function getValues() {
-//     value = scrapeForum(url+1, getIDSelector(1))
-//     console.log(value)
-//     // scrapeForum(url+1, getPostSelector(1))
-//     // console.log("======")
-//     // scrapeForum(url+1, getIDSelector(2))
-//     // scrapeForum(url+1, getPostSelector(2))
-//     // console.log("======")
-//     // scrapeForum(url+1, getIDSelector(3))
-//     // scrapeForum(url+1, getPostSelector(3))
-// }
-// getValues()
