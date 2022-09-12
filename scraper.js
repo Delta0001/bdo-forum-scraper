@@ -56,8 +56,7 @@ async function scrapePosts(topicId, maxPages, maxPosts) {
     return results
 }
 
-
-// Start Server
+// Server and Routing
 app = express();
 
 app.get('/', (req, res) => {
@@ -102,8 +101,6 @@ app.get('/api/filter/:topicId', (req, res) => {
             res.send( JSON.stringify(filterTerm(response.data, ["ranger"]), null, 4) );
         } );
 });
-
-
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
