@@ -23,14 +23,14 @@ function getURL(topicId, page) {
 function scrapeForum(url, countSelector, contentSelector) {
     return axios
         .get(url)
-        .then(res => {
+        .then( (res) => {
             // console.log(`statusCode: ${res.status}`);
             let $ = cheerio.load(res.data);
             countText = $(countSelector).text().trim();
             contentText = $(contentSelector).text().trim();
-            return {count: countText, content: contentText};
+            return {count: countText, url: url, content: contentText};
         })
-        .catch(error => {
+        .catch( (error) => {
             console.error(error);
         });
 }
@@ -67,12 +67,42 @@ app.get('/', (req, res) => {
 // example: http://localhost:3000/api/data/24687
 app.get('/api/data/:topicId', async (req, res) => {
     // Scrape 1 page and 10 posts
-    // data = await scrapePosts(31, 10);
-    data = await scrapePosts(req.params.topicId, 1, 10);
+    // data = await scrapePosts(1, 10);
+    data = await scrapePosts(req.params.topicId, 38, 10);
     // res.json( data, null, 4 );
     res.header("Content-Type",'application/json');
     res.send( JSON.stringify(data, null, 4) );
 });
+
+// Filters out all data with data.content that doesn't contain the filter term
+function filterTerm(json, filterTerms) {
+    // Any post with "class" and "ranger" (case insensitive) with 1 to 30 other characters in between
+    searchRegex = "(class).{1,30}(ranger)"
+    filteredData = [];
+    // loop through each data. If one of the filter terms doesn't exists, skip this data and continue
+    for (i in json) {
+        // console.log(json[i])
+        for (term in filterTerms) {
+            // if (! json[i].content.toLowerCase().includes(filterTerms[term]) ) {
+            if (! json[i].content.toLowerCase().match(searchRegex) ) {
+                continue;
+            }
+            filteredData.push(json[i])
+        }
+    }
+    return filteredData;
+}
+
+app.get('/api/filter/:topicId', (req, res) => {
+    axios
+        .get("http://localhost:3000/api/data/"+req.params.topicId)
+        .then( (response) => {
+            // console.log( filterTerm(res.data, ["ranger"]) )
+            res.header("Content-Type",'application/json');
+            res.send( JSON.stringify(filterTerm(response.data, ["ranger"]), null, 4) );
+        } );
+});
+
 
 
 app.listen(port, () => {
